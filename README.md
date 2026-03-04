@@ -1,3 +1,1 @@
 # project-TiMP
-
-Hi, Swyat?
