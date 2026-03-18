@@ -1,21 +1,46 @@
 #include "singleton_client.h"
 
-// Определения статических переменных — только здесь, не в .h!
-SingletonClient* SingletonClient::p_instance = nullptr;
-SingletonDestroyer SingletonClient::destroyer;
+// Определения статических членов
+SingletonClient*         SingletonClient::p_instance = nullptr;
+SingletonClientDestroyer SingletonClient::destroyer;
 
-// Деструктор здесь — SingletonClient уже полностью известен
-SingletonDestroyer::~SingletonDestroyer()
+// Деструктор Destroyer — здесь SingletonClient уже полностью объявлен
+SingletonClientDestroyer::~SingletonClientDestroyer()
 {
     delete p_instance;
 }
 
-SingletonClient::SingletonClient(QObject *parent) : QObject(parent)
+// Деструктор клиента — корректно закрываем сокет
+SingletonClient::~SingletonClient()
 {
-    mTcpSocket = new QTcpSocket(this);
-    mTcpSocket->connectToHost("127.0.0.1", 33333);
+    if (mTcpSocket)
+    {
+        if (mTcpSocket->state() != QAbstractSocket::UnconnectedState)
+        {
+            mTcpSocket->disconnectFromHost();
+            // Даём время на graceful shutdown (waitForDisconnected)
+            if (mTcpSocket->state() != QAbstractSocket::UnconnectedState)
+                mTcpSocket->waitForDisconnected(3000);
+        }
+        // Не вызываем delete — mTcpSocket имеет parent=this, Qt удалит сам
+    }
+}
+
+SingletonClient::SingletonClient(QObject* parent) : QObject(parent)
+{
+    mTcpSocket = new QTcpSocket(this);   // parent=this → автоудаление Qt
+
     connect(mTcpSocket, &QTcpSocket::readyRead,
-            this, &SingletonClient::slotServerRead);
+            this,        &SingletonClient::slotServerRead);
+
+    connect(mTcpSocket, &QTcpSocket::connected,
+            this,        &SingletonClient::slotConnected);
+
+    connect(mTcpSocket, &QTcpSocket::disconnected,
+            this,        &SingletonClient::slotDisconnected);
+
+    connect(mTcpSocket, &QAbstractSocket::errorOccurred,
+            this,        &SingletonClient::slotError);
 }
 
 SingletonClient* SingletonClient::getInstance()
@@ -28,19 +53,52 @@ SingletonClient* SingletonClient::getInstance()
     return p_instance;
 }
 
-void SingletonClient::send_msg_to_server(QString query)
+void SingletonClient::connectToServer(const QString& host, quint16 port)
 {
-    mTcpSocket->write(query.toUtf8());
+    if (mTcpSocket->state() == QAbstractSocket::UnconnectedState)
+        mTcpSocket->connectToHost(host, port);
+}
+
+void SingletonClient::disconnectFromServer()
+{
+    if (mTcpSocket->state() != QAbstractSocket::UnconnectedState)
+        mTcpSocket->disconnectFromHost();
+}
+
+void SingletonClient::send_msg_to_server(const QString& query)
+{
+    if (mTcpSocket->state() == QAbstractSocket::ConnectedState)
+        mTcpSocket->write(query.toUtf8());
+    else
+        qWarning() << "[SingletonClient] Не подключён к серверу!";
 }
 
 void SingletonClient::slotServerRead()
 {
-    QString msg = "";
-    while(mTcpSocket->bytesAvailable() > 0)
-    {
-        QByteArray array = mTcpSocket->readAll();
-        msg.append(array);
-    }
-    qDebug() << msg;
+    QByteArray data;
+    while (mTcpSocket->bytesAvailable() > 0)
+        data.append(mTcpSocket->readAll());
+
+    QString msg = QString::fromUtf8(data);
+    qDebug() << "[SingletonClient] Получено:" << msg;
     emit message_from_server(msg);
+}
+
+void SingletonClient::slotConnected()
+{
+    qDebug() << "[SingletonClient] Подключён к серверу";
+    emit connected();
+}
+
+void SingletonClient::slotDisconnected()
+{
+    qDebug() << "[SingletonClient] Отключён от сервера";
+    emit disconnected();
+}
+
+void SingletonClient::slotError(QAbstractSocket::SocketError socketError)
+{
+    Q_UNUSED(socketError)
+    qWarning() << "[SingletonClient] Ошибка сокета:" << mTcpSocket->errorString();
+    emit errorOccurred(mTcpSocket->errorString());
 }
