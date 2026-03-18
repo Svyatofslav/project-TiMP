@@ -1,16 +1,18 @@
+#ifndef SINGLETON_H
+#define SINGLETON_H
+
 class Singleton;
 
-// Для удаления данных
 class SingletonDestroyer
 {
 private:
-    Singleton * p_instance;
+    Singleton* p_instance = nullptr;
 public:
     ~SingletonDestroyer()
     {
         delete p_instance;
     }
-    void initialize(Singleton * p)
+    void initialize(Singleton* p)
     {
         p_instance = p;
     }
@@ -19,14 +21,17 @@ public:
 class Singleton
 {
 private:
-    static Singleton * p_instance;
+    static Singleton*         p_instance;
     static SingletonDestroyer destroyer;
+
 protected:
     Singleton() {}
-    Singleton(const Singleton&) = delete;
-    Singleton& operator = (Singleton &) = delete;
+    Singleton(const Singleton&)            = delete;
+    Singleton& operator=(const Singleton&) = delete;
     ~Singleton() {}
+
     friend class SingletonDestroyer;
+
 public:
     static Singleton* getInstance()
     {
@@ -39,7 +44,4 @@ public:
     }
 };
 
-// Выделение памяти под статичные переменные
-Singleton::Singleton * p_instance;
-Singleton::SingletonDestroyer destroyer;
-
+#endif // SINGLETON_H
