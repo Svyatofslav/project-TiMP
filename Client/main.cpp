@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     SingletonClient* client = SingletonClient::getInstance();
 
     // Подключаемся к серверу
-    client->connectToServer("127.0.0.1", 33333);
+    client->connectToServer("127.0.0.1", 44444);
 
     // Подключаем сигнал от сервера к отладочному выводу
     QObject::connect(client, &SingletonClient::message_from_server,
