@@ -7,13 +7,13 @@
 
 class SingletonClient;
 
-class SingletonDestroyer
+class SingletonClientDestroyer
 {
 private:
-    SingletonClient * p_instance = nullptr;
+    SingletonClient* p_instance = nullptr;
 public:
-    ~SingletonDestroyer();                        // ← только объявление
-    void initialize(SingletonClient * p)
+    ~SingletonClientDestroyer();          // реализация в .cpp — там SingletonClient полностью известен
+    void initialize(SingletonClient* p)
     {
         p_instance = p;
     }
@@ -22,24 +22,39 @@ public:
 class SingletonClient : public QObject
 {
     Q_OBJECT
+
 private:
-    static SingletonClient * p_instance;
-    static SingletonDestroyer destroyer;
-    QTcpSocket * mTcpSocket;
+    static SingletonClient*        p_instance;
+    static SingletonClientDestroyer destroyer;
+
+    QTcpSocket* mTcpSocket;
+
 protected:
-    SingletonClient(QObject *parent = nullptr);
-    SingletonClient(const SingletonClient&) = delete;
-    SingletonClient& operator = (SingletonClient &) = delete;
-    ~SingletonClient() {}
-    friend class SingletonDestroyer;
+    explicit SingletonClient(QObject* parent = nullptr);
+    SingletonClient(const SingletonClient&)            = delete;
+    SingletonClient& operator=(const SingletonClient&) = delete;
+    ~SingletonClient();                   // объявление — реализация в .cpp
+
+    friend class SingletonClientDestroyer;
+
 public:
     static SingletonClient* getInstance();
-    void send_msg_to_server(QString query);
+
+    void connectToServer(const QString& host, quint16 port);
+    void disconnectFromServer();
+    void send_msg_to_server(const QString& query);
 
 signals:
     void message_from_server(QString msg);
+    void connected();
+    void disconnected();
+    void errorOccurred(QString errorMsg);
+
 private slots:
     void slotServerRead();
+    void slotConnected();
+    void slotDisconnected();
+    void slotError(QAbstractSocket::SocketError socketError);
 };
 
 #endif // SINGLETON_CLIENT_H
