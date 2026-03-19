@@ -69,8 +69,13 @@ void SingletonClient::send_msg_to_server(const QString& query)
 {
     if (mTcpSocket->state() == QAbstractSocket::ConnectedState)
         mTcpSocket->write(query.toUtf8());
+
     else
+    {
         qWarning() << "[SingletonClient] Не подключён к серверу!";
+        emit errorOccurred("Нет соединения с сервером");
+    }
+
 }
 
 void SingletonClient::slotServerRead()

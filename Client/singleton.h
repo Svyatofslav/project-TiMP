@@ -8,10 +8,7 @@ class SingletonDestroyer
 private:
     Singleton* p_instance = nullptr;
 public:
-    ~SingletonDestroyer()
-    {
-        delete p_instance;
-    }
+    ~SingletonDestroyer();
     void initialize(Singleton* p)
     {
         p_instance = p;

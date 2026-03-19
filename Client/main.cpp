@@ -20,14 +20,6 @@ int main(int argc, char *argv[])
                          qDebug() << "Сообщение от сервера:" << msg;
                      });
 
-    // Пример: отправим сообщение через 1 секунду
-    QTimer::singleShot(1000, &a, [&]() {
-        client->send_msg_to_server("Hello from SingletonClient!");
-    });
-
-    // Пример: закрываем приложение через 10 секунд
-    QTimer::singleShot(10000, &a, &QCoreApplication::quit);
-
     // Запускаем event loop — без него Qt-объекты и сигналы не работают
     return a.exec();
 }
