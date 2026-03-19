@@ -157,3 +157,5 @@ QString logout(QStringList params, int descriptor)
     DataBase::getInstance()->logoutUser(login);
     return "logout_OK\r\n";
 }
+
+//test git
