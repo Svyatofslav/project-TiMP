@@ -107,3 +107,5 @@ void SingletonClient::slotError(QAbstractSocket::SocketError socketError)
     qWarning() << "[SingletonClient] Ошибка сокета:" << mTcpSocket->errorString();
     emit errorOccurred(mTcpSocket->errorString());
 }
+
+// тестовый комит
