@@ -8,3 +8,7 @@ Build/
 # Windows
 Thumbs.db
 desktop.ini
+
+# Служебные
+
+**/.idea/
