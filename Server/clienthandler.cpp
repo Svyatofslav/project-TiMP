@@ -1,10 +1,14 @@
+// В файле Server/clienthandler.cpp
+
 #include "clienthandler.h"
 #include "functions_to_server.h"
 #include "DataBase.h"
 #include <QDebug>
 
 ClientHandler::ClientHandler(qintptr socketDescriptor, QObject *parent)
-    : QThread(parent), m_socketDescriptor(socketDescriptor) {}
+    : QThread(parent), m_socketDescriptor(socketDescriptor)
+{
+}
 
 void ClientHandler::run()
 {
@@ -18,11 +22,11 @@ void ClientHandler::run()
 
     qDebug() << "Клиент подключён:" << socket.peerAddress().toString();
 
+    // Основной цикл чтения запросов
     while (socket.state() == QAbstractSocket::ConnectedState)
     {
         if (socket.waitForReadyRead(3000))
         {
-            // Читаем все доступные данные (TCP может дробить пакеты)
             QByteArray data;
             while (socket.bytesAvailable() > 0)
                 data.append(socket.readAll());
@@ -31,40 +35,49 @@ void ClientHandler::run()
             qDebug() << "Запрос от" << socket.peerAddress().toString() << ":" << request;
 
             QString response = parsing(request, (int)m_socketDescriptor);
-
             socket.write(response.toUtf8());
             socket.flush();
         }
         else
         {
-            // waitForReadyRead вернул false — разбираемся почему
             if (socket.state() != QAbstractSocket::ConnectedState)
             {
-                // Клиент реально отключился
                 qDebug() << "Клиент отключился:" << socket.peerAddress().toString();
                 break;
             }
-            // Иначе — просто таймаут (3 сек тишины), клиент ещё подключён
-            // Продолжаем ждать — не прерываем цикл
         }
     }
 
-    // Корректное закрытие со стороны сервера
+    // Закрываем сокет, если он ещё не отключён
     if (socket.state() != QAbstractSocket::UnconnectedState)
     {
         socket.disconnectFromHost();
         socket.waitForDisconnected(3000);
     }
 
-    // После выхода из while-цикла — принудительный logout
+    // Auto-logout через БД
     QString login = DataBase::getInstance()->getLoginBySocket(
         QString::number(m_socketDescriptor));
+
     if (!login.isEmpty())
     {
         DataBase::getInstance()->logoutUser(login);
         qDebug() << "[ClientHandler] Авто-logout для:" << login;
     }
 
+    // ЛОГирование закрытия БД‑соединения
+    QString connName = QString("connection_%1")
+                           .arg((quintptr)QThread::currentThreadId());
+    {
+        QSqlDatabase db = QSqlDatabase::database(connName);
+        if (db.isOpen())
+        {
+            db.close();
+            qDebug() << "[ClientHandler] БД‑соединение для потока" << connName << "закрыто";
+        }
+    }
+    QSqlDatabase::removeDatabase(connName);
+    qDebug() << "[ClientHandler] БД‑соединение" << connName << "удалено из пула";
 
     qDebug() << "Поток клиента завершён";
 }

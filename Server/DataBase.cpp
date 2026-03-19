@@ -20,6 +20,11 @@ bool DataBase::init(const QString& dbPath)
         return false;
     }
 
+    // Включение WAL и busy timeout
+    QSqlQuery pragma(db);
+    pragma.exec("PRAGMA journal_mode=WAL;");
+    pragma.exec("PRAGMA busy_timeout=5000;");
+
     qDebug() << "[DataBase] БД открыта:" << dbPath;
 
     QSqlQuery query(db);
@@ -40,7 +45,13 @@ bool DataBase::init(const QString& dbPath)
         );
 
     if (!ok)
-        qCritical() << "[DataBase] Ошибка создания таблицы:" << query.lastError().text();
+    {
+        QSqlError err = query.lastError();
+        qCritical() << "[DataBase] Ошибка создания таблицы:" << err.text();
+        // SQLITE_BUSY/SQLITE_LOCKED будут в тексте err.text(),
+        // не можем пользоваться err.number() в старых Qt
+        return false;
+    }
     else
         qDebug() << "[DataBase] Таблица Person готова";
 
@@ -76,7 +87,9 @@ QString DataBase::authUser(const QString& login, const QString& password)
 
     if (!query.exec())
     {
-        qWarning() << "[DataBase] authUser ошибка:" << query.lastError().text();
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] authUser ошибка:" << err.text();
+        // SQLITE_BUSY/SQLITE_LOCKED будут в тексте err.text()
         return "";
     }
 
@@ -103,7 +116,9 @@ bool DataBase::registerUser(const QString& login,
 
     if (!query.exec())
     {
-        QString errText = query.lastError().text();
+        QSqlError err = query.lastError();
+        QString errText = err.text();
+        qWarning() << "[DataBase] registerUser ошибка:" << errText;
 
         if (errText.contains("Person.login", Qt::CaseInsensitive))
             qWarning() << "[DataBase] registerUser: логин уже занят:" << login;
@@ -129,7 +144,8 @@ bool DataBase::updateSocketID(const QString& login, const QString& socketID)
 
     if (!query.exec())
     {
-        qWarning() << "[DataBase] updateSocketID ошибка:" << query.lastError().text();
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] updateSocketID ошибка:" << err.text();
         return false;
     }
 
@@ -145,7 +161,11 @@ QString DataBase::getStatsByLogin(const QString& login)
     query.bindValue(":login", login);
 
     if (!query.exec() || !query.next())
+    {
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] getStatsByLogin ошибка:" << err.text();
         return "ERROR: пользователь не найден\r\n";
+    }
 
     return QString("login: %1 | task1: %2 | task2: %3 | task3: %4 | task4: %5\r\n")
         .arg(query.value(0).toString())
@@ -172,7 +192,8 @@ bool DataBase::incrementTask(const QString& login, int taskNum)
 
     if (!query.exec())
     {
-        qWarning() << "[DataBase] incrementTask ошибка:" << query.lastError().text();
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] incrementTask ошибка:" << err.text();
         return false;
     }
 
@@ -198,14 +219,108 @@ bool DataBase::logoutUser(const QString& login)
     QMutexLocker locker(&m_mutex);
 
     QSqlQuery query(getConnection());
-    query.prepare("UPDATE Person SET socketID = NULL WHERE login = :login");
+    query.prepare("UPDATE Person SET socketID = NULL, currtask = NULL, params = NULL WHERE login = :login");
     query.bindValue(":login", login);
 
     if (!query.exec())
     {
-        qWarning() << "[DataBase] logoutUser ошибка:" << query.lastError().text();
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] logoutUser ошибка:" << err.text();
         return false;
     }
 
+    return true;
+}
+
+bool DataBase::updateCurrTask(const QString& login, int taskNum)
+{
+    QMutexLocker locker(&m_mutex);
+
+    QSqlQuery query(getConnection());
+    query.prepare("UPDATE Person SET currtask = :ct WHERE login = :login");
+    query.bindValue(":ct",    taskNum);
+    query.bindValue(":login", login);
+
+    if (!query.exec())
+    {
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] updateCurrTask ошибка:" << err.text();
+        return false;
+    }
+    return true;
+}
+
+bool DataBase::updateParams(const QString& login, const QString& params)
+{
+    QMutexLocker locker(&m_mutex);
+
+    QSqlQuery query(getConnection());
+    query.prepare("UPDATE Person SET params = :params WHERE login = :login");
+    query.bindValue(":params", params);
+    query.bindValue(":login",  login);
+
+    if (!query.exec())
+    {
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] updateParams ошибка:" << err.text();
+        return false;
+    }
+    return true;
+}
+
+QStringList DataBase::getCurrTaskAndParams(const QString& login)
+{
+    QMutexLocker locker(&m_mutex);
+
+    QSqlQuery query(getConnection());
+    query.prepare("SELECT currtask, params FROM Person WHERE login = :login");
+    query.bindValue(":login", login);
+
+    if (!query.exec() || !query.next())
+        return QStringList();
+
+    return QStringList()
+           << query.value(0).toString()   // currtask
+           << query.value(1).toString();  // params
+}
+
+bool DataBase::updateTaskScore(const QString& login, int taskNum, int delta)
+{
+    QMutexLocker locker(&m_mutex);
+
+    if (taskNum < 1 || taskNum > 4)
+        return false;
+
+    QString col = QString("task%1").arg(taskNum);
+
+    QSqlQuery query(getConnection());
+    // delta может быть +1 или -1 (поле принимает отрицательные значения)
+    query.prepare(QString("UPDATE Person SET %1 = %1 + :delta WHERE login = :login").arg(col));
+    query.bindValue(":delta", delta);
+    query.bindValue(":login", login);
+
+    if (!query.exec())
+    {
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] updateTaskScore ошибка:" << err.text();
+        return false;
+    }
+    return true;
+}
+
+bool DataBase::clearTaskState(const QString& login)
+{
+    QMutexLocker locker(&m_mutex);
+
+    QSqlQuery query(getConnection());
+    query.prepare("UPDATE Person SET currtask = NULL, params = NULL WHERE login = :login");
+    query.bindValue(":login", login);
+
+    if (!query.exec())
+    {
+        QSqlError err = query.lastError();
+        qWarning() << "[DataBase] clearTaskState ошибка:" << err.text();
+        return false;
+    }
     return true;
 }
