@@ -26,9 +26,9 @@ QString parsing(QString str, int descriptor)
     else if (func == "task2")         return task2(parts, descriptor);
     else if (func == "task3")         return task3(parts, descriptor);
     else if (func == "task4")         return task4(parts, descriptor);
-    else if (func == "authorization") return author(parts, descriptor);
-    else if (func == "registration")  return reg(parts, descriptor);
-    else if (func == "statistics")    return stat(parts, descriptor);
+    else if (func == "auth") return author(parts, descriptor);
+    else if (func == "reg")  return reg(parts, descriptor);
+    else if (func == "stat")    return stat(parts, descriptor);
     else if (func == "logout")        return logout(parts, descriptor);
 
     return "ERROR: неизвестная команда\r\n";
