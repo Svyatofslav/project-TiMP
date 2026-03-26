@@ -30,17 +30,8 @@ SingletonClient::SingletonClient(QObject* parent) : QObject(parent)
 {
     mTcpSocket = new QTcpSocket(this);   // parent=this → автоудаление Qt
 
-    connect(mTcpSocket, &QTcpSocket::readyRead,
-            this,        &SingletonClient::slotServerRead);
-
-    connect(mTcpSocket, &QTcpSocket::connected,
-            this,        &SingletonClient::slotConnected);
-
     connect(mTcpSocket, &QTcpSocket::disconnected,
             this,        &SingletonClient::slotDisconnected);
-
-    connect(mTcpSocket, &QAbstractSocket::errorOccurred,
-            this,        &SingletonClient::slotError);
 }
 
 SingletonClient* SingletonClient::getInstance()
@@ -56,7 +47,19 @@ SingletonClient* SingletonClient::getInstance()
 void SingletonClient::connectToServer(const QString& host, quint16 port)
 {
     if (mTcpSocket->state() == QAbstractSocket::UnconnectedState)
+    {
         mTcpSocket->connectToHost(host, port);
+        if (mTcpSocket->waitForConnected(3000))
+        {
+            qDebug() << "[SingletonClient] Подключён к серверу";
+            emit connected();
+        }
+        else
+        {
+            qWarning() << "[SingletonClient] Не удалось подключиться:" << mTcpSocket->errorString();
+            emit errorOccurred(mTcpSocket->errorString());
+        }
+    }
 }
 
 void SingletonClient::disconnectFromServer()
@@ -67,43 +70,38 @@ void SingletonClient::disconnectFromServer()
 
 void SingletonClient::send_msg_to_server(const QString& query)
 {
-    if (mTcpSocket->state() == QAbstractSocket::ConnectedState)
-        mTcpSocket->write(query.toUtf8());
-
-    else
+    if (mTcpSocket->state() != QAbstractSocket::ConnectedState)
     {
         qWarning() << "[SingletonClient] Не подключён к серверу!";
         emit errorOccurred("Нет соединения с сервером");
+        return;
     }
 
-}
+    // Синхронная отправка
+    mTcpSocket->write(query.toUtf8());
+    if (!mTcpSocket->waitForBytesWritten(3000))
+    {
+        qWarning() << "[SingletonClient] Таймаут отправки:" << mTcpSocket->errorString();
+        emit errorOccurred("Таймаут отправки");
+        return;
+    }
 
-void SingletonClient::slotServerRead()
-{
-    QByteArray data;
-    while (mTcpSocket->bytesAvailable() > 0)
-        data.append(mTcpSocket->readAll());
+    // Синхронное ожидание ответа
+    if (!mTcpSocket->waitForReadyRead(5000))
+    {
+        qWarning() << "[SingletonClient] Таймаут ожидания ответа:" << mTcpSocket->errorString();
+        emit errorOccurred("Таймаут ответа сервера");
+        return;
+    }
 
+    QByteArray data = mTcpSocket->readAll();
     QString msg = QString::fromUtf8(data);
     qDebug() << "[SingletonClient] Получено:" << msg;
     emit message_from_server(msg);
-}
-
-void SingletonClient::slotConnected()
-{
-    qDebug() << "[SingletonClient] Подключён к серверу";
-    emit connected();
 }
 
 void SingletonClient::slotDisconnected()
 {
     qDebug() << "[SingletonClient] Отключён от сервера";
     emit disconnected();
-}
-
-void SingletonClient::slotError(QAbstractSocket::SocketError socketError)
-{
-    Q_UNUSED(socketError)
-    qWarning() << "[SingletonClient] Ошибка сокета:" << mTcpSocket->errorString();
-    emit errorOccurred(mTcpSocket->errorString());
 }

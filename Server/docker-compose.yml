@@ -7,7 +7,6 @@ services:
       - db_data:/app/data
     environment:
       - DB_PATH=/app/data/timp.db
-    restart: unless-stopped
 
 volumes:
   db_data:

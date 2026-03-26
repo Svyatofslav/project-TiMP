@@ -51,10 +51,7 @@ signals:
     void errorOccurred(QString errorMsg);
 
 private slots:
-    void slotServerRead();
-    void slotConnected();
     void slotDisconnected();
-    void slotError(QAbstractSocket::SocketError socketError);
 };
 
 #endif // SINGLETON_CLIENT_H
