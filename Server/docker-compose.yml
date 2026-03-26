@@ -1,3 +1,4 @@
+name: TiMP_based
 services:
   server:
     build: .
