@@ -1,0 +1,14 @@
+name: TiMP_based
+services:
+  server:
+    build: .
+    ports:
+      - "44444:44444"
+    volumes:
+      - db_data:/app/data
+    environment:
+      - DB_PATH=/app/data/timp.db
+    restart: unless-stopped
+
+volumes:
+  db_data:
