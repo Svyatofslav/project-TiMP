@@ -14,4 +14,4 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Sql)
 
 add_subdirectory(Client)
 add_subdirectory(Server)
-add_subdirectory(Front)
+add_subdirectory(Frontend)

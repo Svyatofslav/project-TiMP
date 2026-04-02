@@ -86,6 +86,10 @@ void SingletonClient::send_msg_to_server(const QString& query)
         return;
     }
 
+    // разделители строки
+    QString framed = query + "\r\n";
+    mTcpSocket->write(framed.toUtf8());
+
     // Синхронное ожидание ответа
     if (!mTcpSocket->waitForReadyRead(5000))
     {
