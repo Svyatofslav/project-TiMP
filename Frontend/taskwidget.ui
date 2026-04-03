@@ -30,7 +30,7 @@
    </property>
    <property name="font">
     <font>
-     <family>Courier</family>
+     <family>Sitka</family>
      <pointsize>13</pointsize>
      <hintingpreference>PreferNoHinting</hintingpreference>
     </font>
@@ -100,12 +100,6 @@
      <width>371</width>
      <height>29</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Sitka</family>
-     <pointsize>12</pointsize>
-    </font>
    </property>
    <property name="text">
     <string>Отправить ответ</string>
