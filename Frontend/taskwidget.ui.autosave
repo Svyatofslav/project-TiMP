@@ -30,7 +30,7 @@
    </property>
    <property name="font">
     <font>
-     <family>Sitka</family>
+     <family>Sylfaen</family>
      <pointsize>13</pointsize>
      <hintingpreference>PreferNoHinting</hintingpreference>
     </font>

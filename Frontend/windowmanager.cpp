@@ -87,6 +87,8 @@ void WindowManager::connectSignals()
                                 m_api, &ClientApi::sendTask4);
                         connect(m_mainMenu, &MainMenuWidget::statsClicked,
                                 m_api, &ClientApi::sendStat);
+                        connect(m_mainMenu, &MainMenuWidget::logoutClicked,
+                                m_api, &ClientApi::sendLogout);
                     }
                     if (m_authWidget) m_authWidget->hide();
                     if (m_registerWidget) m_registerWidget->hide();
@@ -116,6 +118,8 @@ void WindowManager::connectSignals()
                                 m_api, &ClientApi::sendTask4);
                         connect(m_mainMenu, &MainMenuWidget::statsClicked,
                                 m_api, &ClientApi::sendStat);
+                        connect(m_mainMenu, &MainMenuWidget::logoutClicked,
+                                m_api, &ClientApi::sendLogout);
                     }
                     if (m_authWidget) m_authWidget->hide();
                     if (m_registerWidget) m_registerWidget->hide();
@@ -196,6 +200,24 @@ void WindowManager::connectSignals()
                 m_statsWidget->show();
                 m_statsWidget->raise();
                 m_statsWidget->activateWindow();
+            });
+
+    // --- выход из аккаунта ---
+    connect(m_api, &ClientApi::logoutResult,
+            [this](bool ok, const QString &message) {
+                if (ok) {
+                    // Успешный выход — возвращаем к авторизации
+                    if (m_mainMenu)
+                        m_mainMenu->hide();
+                    if (m_taskWidget)
+                        m_taskWidget->hide();
+                    if (m_statsWidget)
+                        m_statsWidget->hide();
+                    showAuth();
+                } else {
+                    QMessageBox::warning(nullptr, "Выход", message.isEmpty()
+                                                                             ? "Ошибка выхода" : message);
+                }
             });
 
     // --- общие ошибки / disconnect ---
