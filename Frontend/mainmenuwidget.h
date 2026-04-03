@@ -21,6 +21,7 @@ signals:
     void task3Clicked();
     void task4Clicked();
     void statsClicked();
+    void logoutClicked();
 
 private slots:
     void on_btnTask1_clicked();
@@ -28,6 +29,7 @@ private slots:
     void on_btnTask3_clicked();
     void on_btnTask4_clicked();
     void on_btnStats_clicked();
+    void on_btnLogout_clicked();
 
 private:
     Ui::mainmenuwidget *ui;

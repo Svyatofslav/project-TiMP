@@ -3,7 +3,7 @@
 
 MainMenuWidget::MainMenuWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::mainmenuwidget)      // ← имя из ui_mainmenuwidget.h
+    ui(new Ui::mainmenuwidget)
 {
     ui->setupUi(this);
     setWindowTitle("Главное меню");
@@ -37,4 +37,9 @@ void MainMenuWidget::on_btnTask4_clicked()
 void MainMenuWidget::on_btnStats_clicked()
 {
     emit statsClicked();
+}
+
+void MainMenuWidget::on_btnLogout_clicked()
+{
+    emit logoutClicked();
 }
