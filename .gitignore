@@ -1,7 +1,7 @@
 # Qt Creator
 .qtcreator/
 
-# Папка сборки
+# пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 build/
 Build/
 
@@ -9,6 +9,7 @@ Build/
 Thumbs.db
 desktop.ini
 
-# Служебные
+# пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+*.autosave
 
 **/.idea/
