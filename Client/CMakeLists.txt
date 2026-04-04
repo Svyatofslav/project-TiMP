@@ -14,7 +14,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
 
 add_executable(Client
     main.cpp
-    singleton.h         singleton.cpp
     singleton_client.h  singleton_client.cpp
 )
 
