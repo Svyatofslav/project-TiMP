@@ -22,6 +22,7 @@ add_executable(Frontend
     mainmenuwidget.h mainmenuwidget.cpp mainmenuwidget.ui
     taskwidget.h taskwidget.cpp taskwidget.ui
     statswidget.h statswidget.cpp statswidget.ui
+    resources.qrc
 )
 
 target_link_libraries(Frontend PRIVATE

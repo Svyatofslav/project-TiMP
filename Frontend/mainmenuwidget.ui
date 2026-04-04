@@ -13,116 +13,104 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="btnTask3">
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(51, 51, 51)</string>
+  </property>
+  <widget class="QPushButton" name="btnStats">
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>232</y>
-     <width>141</width>
-     <height>141</height>
+     <y>380</y>
+     <width>265</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Sitka</family>
      <pointsize>12</pointsize>
+     <bold>true</bold>
     </font>
    </property>
-   <property name="text">
-    <string>Задание 3</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnTask4">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>232</y>
-     <width>141</width>
-     <height>141</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Sitka</family>
-     <pointsize>12</pointsize>
-    </font>
+   <property name="styleSheet">
+    <string notr="true">/*Кнопка*/;
+border-radius: 10px;
+background-color: rgb(30, 30, 30);</string>
    </property>
    <property name="text">
-    <string>Задание 4</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnTask2">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>72</y>
-     <width>141</width>
-     <height>141</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Sitka</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Задание 2</string>
+    <string>Статистика</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnTask1">
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>72</y>
-     <width>141</width>
-     <height>141</height>
+     <y>100</y>
+     <width>125</width>
+     <height>125</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="sizeIncrement">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
    </property>
    <property name="font">
     <font>
      <family>Sitka</family>
-     <pointsize>12</pointsize>
+     <pointsize>30</pointsize>
     </font>
    </property>
-   <property name="text">
-    <string>Задание 1</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnStats">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>390</y>
-     <width>301</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Sitka</family>
-     <pointsize>12</pointsize>
-    </font>
+   <property name="styleSheet">
+    <string notr="true">/*Кнопка*/;
+border-radius: 25px;
+background-color: rgb(30, 30, 30);
+color: #6eeeee;</string>
    </property>
    <property name="text">
-    <string>Статистика</string>
+    <string>1</string>
+   </property>
+   <property name="autoRepeatInterval">
+    <number>100</number>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>180</x>
      <y>30</y>
-     <width>301</width>
-     <height>20</height>
+     <width>251</width>
+     <height>60</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Sitka</family>
-     <pointsize>15</pointsize>
+     <pointsize>16</pointsize>
      <bold>true</bold>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #6eeeee;</string>
    </property>
    <property name="text">
     <string>Меню</string>
@@ -131,22 +119,114 @@
     <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnLogout">
+  <widget class="QPushButton" name="btnTask2">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>410</y>
-     <width>55</width>
-     <height>55</height>
+     <x>310</x>
+     <y>100</y>
+     <width>125</width>
+     <height>125</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Sitka</family>
-     <italic>true</italic>
+     <pointsize>30</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/*Кнопка*/;
+border-radius: 25px;
+background-color: rgb(30, 30, 30);
+color: #6eeeee;</string>
+   </property>
+   <property name="text">
+    <string>2</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnTask4">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>240</y>
+     <width>125</width>
+     <height>125</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>30</pointsize>
+    </font>
+   </property>
+   <property name="toolTipDuration">
+    <number>-1</number>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LayoutDirection::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/*Кнопка*/;
+border-radius: 25px;
+background-color: rgb(30, 30, 30);
+color: #6eeeee;</string>
+   </property>
+   <property name="text">
+    <string>4</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnTask3">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>240</y>
+     <width>125</width>
+     <height>125</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>30</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/*Кнопка*/;
+border-radius: 25px;
+background-color: rgb(30, 30, 30);
+color: #6eeeee;</string>
+   </property>
+   <property name="text">
+    <string>3</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnLogout">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>410</y>
+     <width>60</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>System</family>
+     <pointsize>10</pointsize>
+     <italic>false</italic>
      <underline>false</underline>
      <stylestrategy>PreferDefault</stylestrategy>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/*Кнопка*/;
+border: 2px groove rgb(255, 180, 118);
+border-radius: 15px;
+background-color: rgb(30,30,30);
+color: #FFB476;
+
+
+</string>
    </property>
    <property name="text">
     <string>Выход</string>
