@@ -19,91 +19,154 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="verticalLayoutWidget">
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(51, 51, 51)</string>
+  </property>
+  <widget class="QPushButton" name="btnBack">
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>30</y>
-     <width>281</width>
-     <height>391</height>
+     <y>383</y>
+     <width>350</width>
+     <height>45</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="2,1,1,1,1,2,0">
-    <property name="spacing">
-     <number>18</number>
-    </property>
-    <property name="leftMargin">
-     <number>15</number>
-    </property>
-    <property name="topMargin">
-     <number>15</number>
-    </property>
-    <property name="rightMargin">
-     <number>15</number>
-    </property>
-    <property name="bottomMargin">
-     <number>15</number>
-    </property>
-    <item>
-     <widget class="QLabel" name="labelTitle">
-      <property name="font">
-       <font>
-        <family>Sitka</family>
-        <pointsize>15</pointsize>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Статистика</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Пользователь: &lt;login&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="labelT1">
-      <property name="text">
-       <string>Задача 1: 0</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="labelT2">
-      <property name="text">
-       <string>Задача 2: 0</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="labelT3">
-      <property name="text">
-       <string>Задача 3: 0</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="labelT4">
-      <property name="text">
-       <string>Задача 4: 0</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btnBack">
-      <property name="text">
-       <string>Назад</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/*Кнопка*/;
+border-radius: 10px;
+background-color: rgb(30, 30, 30);</string>
+   </property>
+   <property name="text">
+    <string>Назад</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelT3">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>277</y>
+     <width>350</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Задача 3:     0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelT1">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>171</y>
+     <width>350</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Задача 1:     0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelT2">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>224</y>
+     <width>350</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Задача 2:     0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelTitle">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>40</y>
+     <width>350</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>16</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #6eeeee;</string>
+   </property>
+   <property name="text">
+    <string>Статистика</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelT4">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>330</y>
+     <width>350</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Задача 4:     0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>118</y>
+     <width>350</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Пользователь: &lt;login&gt;</string>
+   </property>
   </widget>
  </widget>
  <resources/>

@@ -19,19 +19,24 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">/* Общее*/;
+background-color: rgb(51, 51, 51);
+color: rgb(222, 238, 238)</string>
+  </property>
   <widget class="QLabel" name="labelTaskText">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>90</x>
      <y>60</y>
-     <width>471</width>
-     <height>211</height>
+     <width>450</width>
+     <height>240</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Sitka</family>
-     <pointsize>13</pointsize>
+     <family>Symbol</family>
+     <pointsize>12</pointsize>
      <hintingpreference>PreferNoHinting</hintingpreference>
     </font>
    </property>
@@ -42,7 +47,9 @@
     <enum>Qt::LayoutDirection::LeftToRight</enum>
    </property>
    <property name="styleSheet">
-    <string notr="true">border: 1px solid black;</string>
+    <string notr="true">border: 1px solid rgb(110, 238, 238);
+border-radius: 15px;
+</string>
    </property>
    <property name="frameShadow">
     <enum>QFrame::Shadow::Plain</enum>
@@ -67,10 +74,25 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>290</y>
-     <width>381</width>
-     <height>28</height>
+     <y>330</y>
+     <width>330</width>
+     <height>36</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="tabletTracking">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/*Ввод*/;
+border: 2px inset  rgb(85, 85, 85);
+border-radius: 8px;
+</string>
    </property>
    <property name="placeholderText">
     <string>Введите ответ</string>
@@ -79,11 +101,23 @@
   <widget class="QPushButton" name="btnBack">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>340</y>
-     <width>91</width>
-     <height>29</height>
+     <x>90</x>
+     <y>390</y>
+     <width>450</width>
+     <height>45</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/*Кнопка*/;
+border-radius: 10px;
+background-color: rgb(30, 30, 30);</string>
    </property>
    <property name="text">
     <string>Назад</string>
@@ -95,24 +129,41 @@
   <widget class="QPushButton" name="btnSend">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>340</y>
-     <width>371</width>
-     <height>29</height>
+     <x>510</x>
+     <y>331</y>
+     <width>36</width>
+     <height>36</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/images/Icon/icon_send.png);
+background-color: rgb(110, 238, 238);
+border-radius: 8px;</string>
+   </property>
    <property name="text">
-    <string>Отправить ответ</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>290</y>
-     <width>81</width>
-     <height>20</height>
+     <x>90</x>
+     <y>330</y>
+     <width>70</width>
+     <height>36</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sitka</family>
+     <pointsize>12</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Ответ:</string>
