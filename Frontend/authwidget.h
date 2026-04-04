@@ -15,6 +15,8 @@ public:
     explicit AuthWidget(QWidget *parent = nullptr);
     ~AuthWidget();
 
+    void clearFields();
+
 signals:
     void loginRequested(const QString &login, const QString &password);
     void switchToRegister();
