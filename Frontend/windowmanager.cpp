@@ -206,17 +206,17 @@ void WindowManager::connectSignals()
     connect(m_api, &ClientApi::logoutResult,
             [this](bool ok, const QString &message) {
                 if (ok) {
-                    // Успешный выход — возвращаем к авторизации
-                    if (m_mainMenu)
-                        m_mainMenu->hide();
-                    if (m_taskWidget)
-                        m_taskWidget->hide();
-                    if (m_statsWidget)
-                        m_statsWidget->hide();
-                    showAuth();
+                    if (m_mainMenu)  m_mainMenu->hide();
+                    if (m_taskWidget) m_taskWidget->hide();
+                    if (m_statsWidget) m_statsWidget->hide();
+
+                    if (m_authWidget) {
+                        m_authWidget->clearFields();
+                        m_authWidget->show();
+                    }
                 } else {
                     QMessageBox::warning(nullptr, "Выход", message.isEmpty()
-                                                                             ? "Ошибка выхода" : message);
+                                         ? "Ошибка выхода" : message);
                 }
             });
 

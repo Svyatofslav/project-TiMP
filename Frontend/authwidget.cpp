@@ -24,3 +24,9 @@ void AuthWidget::on_btnToRegister_clicked()
 {
     emit switchToRegister();
 }
+
+void AuthWidget::clearFields()
+{
+    ui->lineLogin->clear();
+    ui->linePassword->clear();
+}
