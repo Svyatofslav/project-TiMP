@@ -219,11 +219,11 @@ color: #6eeeee;</string>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">/*Кнопка*/;
-border: 2px groove rgb(255, 180, 118);
+    <string notr="true">/*Выход*/;
+border: 2px groove #ff7676;
 border-radius: 15px;
 background-color: rgb(30,30,30);
-color: #FFB476;
+color: #FF7676;
 
 
 </string>
