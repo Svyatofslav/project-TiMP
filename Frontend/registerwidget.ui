@@ -273,7 +273,7 @@ background-color: rgb(30, 30, 30);</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -292,7 +292,7 @@ background-color: rgb(30, 30, 30);</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -316,7 +316,7 @@ border-radius: 8px;</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -343,7 +343,7 @@ border-radius: 8px;</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -370,7 +370,7 @@ border-radius: 8px;</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -394,7 +394,7 @@ border-radius: 8px;</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -413,7 +413,7 @@ border-radius: 8px;</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -432,7 +432,7 @@ border-radius: 8px;</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -451,7 +451,7 @@ border-radius: 8px;</string>
    </property>
    <property name="font">
     <font>
-     <family>Segoe UI</family>
+     <family>Sitka</family>
      <pointsize>12</pointsize>
      <bold>true</bold>
     </font>
@@ -465,6 +465,12 @@ background-color: rgb(30, 30, 30);</string>
    </property>
    <property name="text">
     <string>Зарегистрироваться</string>
+   </property>
+   <property name="autoDefault">
+    <bool>true</bool>
+   </property>
+   <property name="default">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

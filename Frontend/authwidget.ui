@@ -56,6 +56,12 @@ background-color: rgb(30, 30, 30);</string>
    <property name="text">
     <string>Войти</string>
    </property>
+   <property name="autoDefault">
+    <bool>true</bool>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QPushButton" name="btnToRegister">
    <property name="geometry">

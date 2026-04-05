@@ -7,6 +7,10 @@ TaskWidget::TaskWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("Задание");
+
+    // Enter в поле ввода → нажать кнопку Отправить ответ
+    connect(ui->lineAnswer, &QLineEdit::returnPressed,
+            ui->btnSend, &QPushButton::click);
 }
 
 TaskWidget::~TaskWidget()
@@ -19,7 +23,7 @@ void TaskWidget::setTask(const QString &funcName, double a, double b, int n)
     QString text = QString(
                        "Вычислите приближённое значение определённого интеграла\n"
                        "%1 на отрезке [%2, %3]\n"
-                       "методом средних прямоугольников при n = %4 разбиениях.")
+                       "методом средних прямоугольников\nпри n = %4 разбиениях.")
                        .arg(funcName)
                        .arg(a, 0, 'f', 2)
                        .arg(b, 0, 'f', 2)

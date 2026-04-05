@@ -7,6 +7,13 @@ AuthWidget::AuthWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("Авторизация");
+
+    connect(ui->lineLogin, &QLineEdit::returnPressed,
+            ui->linePassword, QOverload<>::of(&QWidget::setFocus));
+
+    // Enter в пароле → нажать кнопку Войти
+    connect(ui->linePassword, &QLineEdit::returnPressed,
+            ui->btnLogin, &QPushButton::click);
 }
 
 AuthWidget::~AuthWidget()
