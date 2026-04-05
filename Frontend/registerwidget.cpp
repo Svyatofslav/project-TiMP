@@ -7,6 +7,19 @@ RegisterWidget::RegisterWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("Регистрация");
+
+    connect(ui->lineLogin, &QLineEdit::returnPressed,
+            ui->lineEmail, QOverload<>::of(&QWidget::setFocus));
+
+    connect(ui->lineEmail, &QLineEdit::returnPressed,
+            ui->linePassword1, QOverload<>::of(&QWidget::setFocus));
+
+    connect(ui->linePassword1, &QLineEdit::returnPressed,
+            ui->linePassword2, QOverload<>::of(&QWidget::setFocus));
+
+    // Enter в последнем поле → нажать кнопку "Зарегистрироваться"
+    connect(ui->linePassword2, &QLineEdit::returnPressed,
+            ui->btnRegister, &QPushButton::click);
 }
 
 RegisterWidget::~RegisterWidget()

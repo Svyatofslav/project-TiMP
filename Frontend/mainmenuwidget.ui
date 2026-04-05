@@ -19,7 +19,7 @@
   <widget class="QPushButton" name="btnStats">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>187</x>
      <y>380</y>
      <width>265</width>
      <height>51</height>
@@ -44,8 +44,8 @@ background-color: rgb(30, 30, 30);</string>
   <widget class="QPushButton" name="btnTask1">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>100</y>
+     <x>187</x>
+     <y>110</y>
      <width>125</width>
      <height>125</height>
     </rect>
@@ -84,7 +84,7 @@ background-color: rgb(30, 30, 30);</string>
     <string notr="true">/*Кнопка*/;
 border-radius: 25px;
 background-color: rgb(30, 30, 30);
-color: #6eeeee;</string>
+color: #FFD6B4;</string>
    </property>
    <property name="text">
     <string>1</string>
@@ -96,9 +96,9 @@ color: #6eeeee;</string>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>30</y>
-     <width>251</width>
+     <x>187</x>
+     <y>40</y>
+     <width>265</width>
      <height>60</height>
     </rect>
    </property>
@@ -122,8 +122,8 @@ color: #6eeeee;</string>
   <widget class="QPushButton" name="btnTask2">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>100</y>
+     <x>327</x>
+     <y>110</y>
      <width>125</width>
      <height>125</height>
     </rect>
@@ -138,7 +138,7 @@ color: #6eeeee;</string>
     <string notr="true">/*Кнопка*/;
 border-radius: 25px;
 background-color: rgb(30, 30, 30);
-color: #6eeeee;</string>
+color: #FFD6B4;</string>
    </property>
    <property name="text">
     <string>2</string>
@@ -147,8 +147,8 @@ color: #6eeeee;</string>
   <widget class="QPushButton" name="btnTask4">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>240</y>
+     <x>327</x>
+     <y>245</y>
      <width>125</width>
      <height>125</height>
     </rect>
@@ -169,7 +169,7 @@ color: #6eeeee;</string>
     <string notr="true">/*Кнопка*/;
 border-radius: 25px;
 background-color: rgb(30, 30, 30);
-color: #6eeeee;</string>
+color: #FFD6B4;</string>
    </property>
    <property name="text">
     <string>4</string>
@@ -178,8 +178,8 @@ color: #6eeeee;</string>
   <widget class="QPushButton" name="btnTask3">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>240</y>
+     <x>187</x>
+     <y>245</y>
      <width>125</width>
      <height>125</height>
     </rect>
@@ -194,7 +194,7 @@ color: #6eeeee;</string>
     <string notr="true">/*Кнопка*/;
 border-radius: 25px;
 background-color: rgb(30, 30, 30);
-color: #6eeeee;</string>
+color: #FFD6B4;</string>
    </property>
    <property name="text">
     <string>3</string>
@@ -219,14 +219,11 @@ color: #6eeeee;</string>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">/*Кнопка*/;
-border: 2px groove rgb(255, 180, 118);
+    <string notr="true">/*Выход*/;
+border: 2px solid #ff7676;
 border-radius: 15px;
 background-color: rgb(30,30,30);
-color: #FFB476;
-
-
-</string>
+color: #FF7676;</string>
    </property>
    <property name="text">
     <string>Выход</string>

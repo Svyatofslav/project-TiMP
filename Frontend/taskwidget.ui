@@ -14,6 +14,7 @@
    <font>
     <family>Sitka</family>
     <pointsize>12</pointsize>
+    <italic>false</italic>
    </font>
   </property>
   <property name="windowTitle">
@@ -35,9 +36,13 @@ color: rgb(222, 238, 238)</string>
    </property>
    <property name="font">
     <font>
-     <family>Symbol</family>
+     <family>System</family>
      <pointsize>12</pointsize>
+     <italic>false</italic>
+     <underline>false</underline>
+     <kerning>true</kerning>
      <hintingpreference>PreferNoHinting</hintingpreference>
+     <fontweight>Medium</fontweight>
     </font>
    </property>
    <property name="focusPolicy">
@@ -49,7 +54,8 @@ color: rgb(222, 238, 238)</string>
    <property name="styleSheet">
     <string notr="true">border: 1px solid rgb(110, 238, 238);
 border-radius: 15px;
-</string>
+padding: 25px;
+overflow: auto;</string>
    </property>
    <property name="frameShadow">
     <enum>QFrame::Shadow::Plain</enum>
@@ -148,6 +154,12 @@ border-radius: 8px;</string>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="autoDefault">
+    <bool>true</bool>
+   </property>
+   <property name="default">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
