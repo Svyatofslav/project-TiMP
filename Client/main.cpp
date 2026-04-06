@@ -23,5 +23,3 @@ int main(int argc, char *argv[])
     // Запускаем event loop — без него Qt-объекты и сигналы не работают
     return a.exec();
 }
-
-// ПЕНИС БОЛЬШОЙ
