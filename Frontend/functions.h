@@ -9,6 +9,7 @@ enum class ResponseType {
     RegOk,
     RegError,
     Task1Ok,
+    Task2Ok,
     TaskInfo,
     CheckOk,
     CheckFalse,

@@ -186,6 +186,8 @@ void ClientApi::processResponse(const QString &msg)
         emit regResult(false, r.message);
     } else if (r.type == ResponseType::Task1Ok) {
         emit task1Received(r.funcName, r.a, r.b, r.n);
+    } else if (r.type == ResponseType::Task2Ok) {
+        emit task2Received(r.funcName, r.a, r.b, r.n);
     } else if (r.type == ResponseType::TaskInfo) {
         emit taskInfo(r.message);
     } else if (r.type == ResponseType::CheckOk) {
