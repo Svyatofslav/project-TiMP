@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtNetwork/QTcpSocket>
+#include <QTimer>
 
 class ClientApi : public QObject
 {
@@ -46,13 +47,20 @@ signals:
 private slots:
     void onReadyRead();
     void onDisconnected();
+    void onSocketError(QAbstractSocket::SocketError error);
+    void onReconnectTimeout();
 
 private:
     void sendRaw(const QString &msg);
     void processResponse(const QString &msg);
+    void scheduleReconnect();
 
     QTcpSocket *m_socket;
     QString m_buffer;
+
+    QTimer m_reconnectTimer;
+    QString m_host;
+    quint16 m_port = 0;
 };
 
 #endif // CLIENTAPI_H
