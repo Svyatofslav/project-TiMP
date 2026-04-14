@@ -13,7 +13,7 @@ WindowManager::WindowManager(QObject *parent)
     m_api(new ClientApi(this))
 {
     // подключение к серверу при старте
-    m_api->connectToServer("127.0.0.1", 44444);
+    m_api->connectToServer("185.156.72.66", 38100);
     connectSignals();
 }
 

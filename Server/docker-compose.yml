@@ -3,7 +3,7 @@ services:
   server:
     build: .
     ports:
-      - "44444:44444"
+      - "38100:44444"
     volumes:
       - db_data:/app/data
     environment:
