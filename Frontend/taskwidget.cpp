@@ -18,15 +18,22 @@ TaskWidget::~TaskWidget()
     delete ui;
 }
 
-void TaskWidget::setTask(const QString &funcName, double a, double b, int n)
+void TaskWidget::setTask(const QString &funcName, double a, double b, int n, Method method)
 {
+    QString methodText;
+    if (method == Method::MiddleRectangles)
+        methodText = "методом средних прямоугольников";
+    else
+        methodText = "методом левых прямоугольников";
+
     QString text = QString(
                        "Вычислите приближённое значение определённого интеграла\n"
                        "%1 на отрезке [%2, %3]\n"
-                       "методом средних прямоугольников\nпри n = %4 разбиениях.")
+                       "%4 при n = %5 разбиениях.")
                        .arg(funcName)
                        .arg(a, 0, 'f', 2)
                        .arg(b, 0, 'f', 2)
+                       .arg(methodText)
                        .arg(n);
     ui->labelTaskText->setText(text);
     ui->lineAnswer->clear();

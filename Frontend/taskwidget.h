@@ -15,7 +15,12 @@ public:
     explicit TaskWidget(QWidget *parent = nullptr);
     ~TaskWidget();
 
-    void setTask(const QString &funcName, double a, double b, int n);
+    enum class Method {
+        MiddleRectangles,
+        LeftRectangles
+    };
+
+    void setTask(const QString &funcName, double a, double b, int n, Method method);
 
 signals:
     void checkRequested(const QString &answer);

@@ -29,4 +29,9 @@ QString get_random_task1();
 double  solver_task1(const QString& params);
 QString funcName_task1(int funcId);
 
+// Вспомогательные для task2
+QString get_random_task2();
+double solver_task2(const QString& params);
+QString funcName_task2(int funcId);
+
 #endif // FUNCTIONS_TO_SERVER_H

@@ -10,20 +10,38 @@ ClientApi::ClientApi(QObject *parent)
             this, &ClientApi::onReadyRead);
     connect(m_socket, &QTcpSocket::disconnected,
             this, &ClientApi::onDisconnected);
+    connect(m_socket, &QTcpSocket::errorOccurred,
+            this, &ClientApi::onSocketError);
+
+    connect(m_socket, &QTcpSocket::connected, this, [this]() {
+       m_reconnectTimer.stop();
+    });
+
+    m_reconnectTimer.setInterval(10000);
+    m_reconnectTimer.setSingleShot(false);
+    connect(&m_reconnectTimer, &QTimer::timeout,
+            this, &ClientApi::onReconnectTimeout);
 }
 
 void ClientApi::connectToServer(const QString &host, quint16 port)
 {
-    if (m_socket->state() == QAbstractSocket::ConnectedState)
+    m_host = host;
+    m_port = port;
+
+    if (m_socket->state() == QAbstractSocket::ConnectedState ||
+        m_socket->state() == QAbstractSocket::ConnectingState)
         return;
 
+    m_socket->abort();
     m_socket->connectToHost(host, port);
-    if (!m_socket->waitForConnected(3000)) {
-        emit errorOccurred(tr("Не удалось подключиться к серверу: %1")
-                               .arg(m_socket->errorString()));
-    } else {
-        qDebug() << "[ClientApi] Connected to server";
-    }
+
+    // версия для одинарного подключения
+    // if (!m_socket->waitForConnected(3000)) {
+    //     emit errorOccurred(tr("Не удалось подключиться к серверу: %1")
+    //                            .arg(m_socket->errorString()));
+    // } else {
+    //     qDebug() << "[ClientApi] Connected to server";
+    // }
 }
 
 bool ClientApi::isConnected() const
@@ -35,14 +53,18 @@ void ClientApi::sendRaw(const QString &msg)
 {
     if (!isConnected()) {
         emit errorOccurred(tr("Нет соединения с сервером"));
+        scheduleReconnect();
         return;
     }
     QByteArray data = msg.toUtf8();
     m_socket->write(data);
-    if (!m_socket->waitForBytesWritten(3000)) {
-        emit errorOccurred(tr("Таймаут отправки: %1")
-                               .arg(m_socket->errorString()));
-    }
+    m_socket->flush();
+
+    // версия для динарного подключения
+    // if (!m_socket->waitForBytesWritten(3000)) {
+    //     emit errorOccurred(tr("Таймаут отправки: %1")
+    //                            .arg(m_socket->errorString()));
+    // }
 }
 
 // -------- высокоуровневые запросы --------
@@ -122,6 +144,32 @@ void ClientApi::onReadyRead()
 void ClientApi::onDisconnected()
 {
     emit disconnected();
+    scheduleReconnect();
+}
+
+void ClientApi::onSocketError(QAbstractSocket::SocketError error)
+{
+    emit errorOccurred(m_socket->errorString());
+    scheduleReconnect();
+}
+
+void ClientApi::scheduleReconnect()
+{
+    if (m_host.isEmpty() || m_port == 0)
+        return; // ещё не вызывали connectToServer
+
+    if (!m_reconnectTimer.isActive())
+        m_reconnectTimer.start();
+}
+
+void ClientApi::onReconnectTimeout()
+{
+    if (m_socket->state() == QAbstractSocket::ConnectedState ||
+        m_socket->state() == QAbstractSocket::ConnectingState)
+        return;
+
+    m_socket->abort();
+    m_socket->connectToHost(m_host, m_port);
 }
 
 void ClientApi::processResponse(const QString &msg)
@@ -138,6 +186,8 @@ void ClientApi::processResponse(const QString &msg)
         emit regResult(false, r.message);
     } else if (r.type == ResponseType::Task1Ok) {
         emit task1Received(r.funcName, r.a, r.b, r.n);
+    } else if (r.type == ResponseType::Task2Ok) {
+        emit task2Received(r.funcName, r.a, r.b, r.n);
     } else if (r.type == ResponseType::TaskInfo) {
         emit taskInfo(r.message);
     } else if (r.type == ResponseType::CheckOk) {

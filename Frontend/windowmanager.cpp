@@ -13,7 +13,7 @@ WindowManager::WindowManager(QObject *parent)
     m_api(new ClientApi(this))
 {
     // подключение к серверу при старте
-    m_api->connectToServer("127.0.0.1", 44444);
+    m_api->connectToServer("185.156.72.66", 38100);
     connectSignals();
 }
 
@@ -150,13 +150,38 @@ void WindowManager::connectSignals()
                             });
                 }
                 if (m_mainMenu) m_mainMenu->hide();
-                m_taskWidget->setTask(funcName, a, b, n);
+                m_taskWidget->setTask(funcName, a, b, n, TaskWidget::Method::LeftRectangles);
                 m_taskWidget->show();
                 m_taskWidget->raise();
                 m_taskWidget->activateWindow();
             });
 
-    // --- task2-4 в разработке ---
+    // --- task2 ---
+    connect(m_api, &ClientApi::task2Received,
+            [this](const QString &funcName, double a, double b, int n) {
+                if (!m_taskWidget) {
+                    m_taskWidget = new TaskWidget;
+                    connect(m_taskWidget, &TaskWidget::checkRequested,
+                            m_api, &ClientApi::sendCheckTask);
+                    connect(m_taskWidget, &TaskWidget::backToMenuRequested,
+                            [this]() {
+                                if (m_taskWidget) m_taskWidget->hide();
+                                if (m_mainMenu) {
+                                    m_mainMenu->show();
+                                    m_mainMenu->raise();
+                                    m_mainMenu->activateWindow();
+                                }
+                            });
+                }
+                if (m_mainMenu) m_mainMenu->hide();
+                m_taskWidget->setTask(funcName, a, b, n,
+                                      TaskWidget::Method::LeftRectangles);
+                m_taskWidget->show();
+                m_taskWidget->raise();
+                m_taskWidget->activateWindow();
+            });
+
+    // --- task3-4 в разработке ---
     connect(m_api, &ClientApi::taskInfo,
             [this](const QString &message) {
                 QMessageBox::information(nullptr, "Задание", message);
