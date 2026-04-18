@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Network)
 
-add_executable(Frontend
+add_executable(Frontend WIN32
     main.cpp
     clientapi.h clientapi.cpp
     functions.h functions.cpp

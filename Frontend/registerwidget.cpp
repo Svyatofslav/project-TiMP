@@ -9,13 +9,13 @@ RegisterWidget::RegisterWidget(QWidget *parent) :
     setWindowTitle("Регистрация");
 
     connect(ui->lineLogin, &QLineEdit::returnPressed,
-            ui->lineEmail, QOverload<>::of(&QWidget::setFocus));
+            this, [this]() { ui->lineEmail->setFocus(Qt::TabFocusReason); });
 
     connect(ui->lineEmail, &QLineEdit::returnPressed,
-            ui->linePassword1, QOverload<>::of(&QWidget::setFocus));
+            this, [this]() { ui->linePassword1->setFocus(Qt::TabFocusReason); });
 
     connect(ui->linePassword1, &QLineEdit::returnPressed,
-            ui->linePassword2, QOverload<>::of(&QWidget::setFocus));
+            this, [this]() { ui->linePassword2->setFocus(Qt::TabFocusReason); });
 
     // Enter в последнем поле → нажать кнопку "Зарегистрироваться"
     connect(ui->linePassword2, &QLineEdit::returnPressed,
