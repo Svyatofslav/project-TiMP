@@ -74,6 +74,36 @@ QString funcName_task2(int funcId)
     return funcName_task1(funcId);
 }
 
+struct Task3Variant {
+    QString function;
+    double a;
+    double b;
+    QString answer;
+};
+
+static const Task3Variant task3_variants[] = {
+    {"1/√x", 0.0, 1.0, "да"},
+    {"sin(x)/√x", 0.0, 1.0, "да"},
+    {"ln(x)", 0.0, 1.0, "да"},
+    {"1/√(1-x)", 0.0, 1.0, "да"},
+    {"1/√(1-x²)", -1.0, 1.0, "да"},
+
+    {"1/x", 0.0, 1.0, "нет"},
+    {"1/x²", 0.0, 1.0, "нет"},
+    {"1/(1-x)", 0.0, 1.0, "нет"},
+    {"1/(x-1)²", 0.0, 2.0, "нет"},
+    {"1/x^1.5", 0.0, 1.0, "нет"},
+
+    {"x²", 0.0, 1.0, "да"},
+    {"x³", 0.0, 1.0, "да"},
+    {"sin(x)", 0.0, 3.14159, "да"},
+    {"cos(x)", 0.0, 3.14159, "да"},
+    {"e^x", 0.0, 2.0, "да"},
+    {"2x+1", 0.0, 2.0, "да"}
+};
+
+static const int TASK3_COUNT = sizeof(task3_variants) / sizeof(Task3Variant);
+
 // Параметры хранятся как целые сотые (избегаем проблем с локалью при сериализации)
 QString get_random_task1()
 {
@@ -86,6 +116,17 @@ QString get_random_task1()
     return QString("%1||%2||%3||%4").arg(funcId).arg(a_cents).arg(b_cents).arg(n);
 }
 
+QString get_random_task3()
+{
+    int idx = QRandomGenerator::global()->bounded(0, TASK3_COUNT);
+    const Task3Variant& v = task3_variants[idx];
+
+    return QString("%1||%2||%3||%4")
+        .arg(v.function)
+        .arg(v.a, 0, 'f', 3)
+        .arg(v.b, 0, 'f', 3)
+        .arg(v.answer);
+}
 // Метод средних прямоугольников
 double solver_task1(const QString& params)
 {
@@ -128,6 +169,13 @@ double solver_task2(const QString& params)
     }
 
     return result * h;
+}
+
+QString solver_task3(const QString& params)
+{
+    QStringList parts = params.split("||");
+    if (parts.size() < 4) return "нет";
+    return parts[3];
 }
 // ─── Обработчики команд ───────────────────────────────────────────────────────
 
@@ -175,7 +223,19 @@ QString task3(QStringList params, int descriptor)
 {
     QString login = DataBase::getInstance()->getLoginBySocket(QString::number(descriptor));
     if (login.isEmpty()) return "task3_Error||не авторизован";
-    return "task3_Info||задание в разработке";
+
+    QString taskParams = get_random_task3();
+    QStringList p = taskParams.split("||");
+
+    DataBase::getInstance()->updateCurrTask(login, 3);
+    DataBase::getInstance()->updateParams(login, taskParams);
+
+    qDebug() << "[Server] task3 для" << login << "| params:" << taskParams;
+
+    return QString("task3_OK||%1||%2||%3")
+        .arg(p[0])
+        .arg(p[1])
+        .arg(p[2]);
 }
 
 QString task4(QStringList params, int descriptor)
@@ -196,11 +256,35 @@ QString check_task(QStringList params, int descriptor)
 
     QStringList taskData = DataBase::getInstance()->getCurrTaskAndParams(login);
     if (taskData.size() < 2 || taskData[0].isEmpty() || taskData[1].isEmpty())
-        return "check_Error||нет активного задания, сначала запросите задание (task1)";
+        return "check_Error||нет активного задания, сначала запросите задание";
 
     int     currTask   = taskData[0].toInt();
     QString taskParams = taskData[1];
 
+    // ─── Task3: строковый ответ да/нет ───────────────────────────────────────
+    if (currTask == 3) {
+        QString userAnswer   = params[0].trimmed().toLower();
+        QString correctAnswer = solver_task3(taskParams).toLower();
+
+        bool isCorrect = (userAnswer == correctAnswer);
+
+        qDebug() << "[Task] Пользователь:" << login
+                 << "| задание: 3"
+                 << "| ответ:" << userAnswer
+                 << "| верно:" << isCorrect;
+
+        DataBase::getInstance()->updateTaskScore(login, 3, isCorrect ? 1 : -1);
+        DataBase::getInstance()->clearTaskState(login);
+
+        if (isCorrect)
+            return QString("check_OK||%1").arg(correctAnswer);
+        else
+            return QString("check_False||%1||%2")
+                .arg(userAnswer)
+                .arg(correctAnswer);
+    }
+
+    // ─── Task1, Task2: числовой ответ ────────────────────────────────────────
     bool ok;
     double userAnswer = params[0].trimmed().replace(",", ".").toDouble(&ok);
     if (!ok) return "check_Error||некорректный ответ, введите число (например: 0.33)";
@@ -226,8 +310,7 @@ QString check_task(QStringList params, int descriptor)
     DataBase::getInstance()->clearTaskState(login);
 
     if (isCorrect)
-        return QString("check_OK||%1")
-            .arg(correctAnswer, 0, 'f', 4);
+        return QString("check_OK||%1").arg(correctAnswer, 0, 'f', 4);
     else
         return QString("check_False||%1||%2")
             .arg(userAnswer,    0, 'f', 4)
