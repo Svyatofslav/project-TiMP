@@ -17,7 +17,8 @@ public:
 
     enum class Method {
         MiddleRectangles,
-        LeftRectangles
+        LeftRectangles,
+        Task3TrapezoidCheck
     };
 
     void setTask(const QString &funcName, double a, double b, int n, Method method);
@@ -31,6 +32,7 @@ private slots:
     void on_btnBack_clicked();
 
 private:
+    Method m_currentMethod = Method::MiddleRectangles;
     Ui::taskwidget *ui;
 };
 

@@ -32,6 +32,7 @@ signals:
     void regResult(bool ok, const QString &message);
     void task1Received(const QString &funcName, double a, double b, int n);
     void task2Received(const QString &funcName, double a, double b, int n);
+    void task3Received(const QString &function, double a, double b);
     void taskInfo(const QString &message); // для task2-4 "в разработке"
     void checkResult(bool ok,
                      double userAnswer,
