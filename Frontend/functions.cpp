@@ -95,6 +95,12 @@ ParsedResponse Functions::parseResponse(const QString &msg)
         r.a = take(2).toDouble();
         r.b = take(3).toDouble();
         r.n = take(4).toInt();
+    } else if (prefix == "task3_OK") {
+        // task3_OK||function||a||b
+        r.type = ResponseType::Task3Ok;
+        r.task3Function = take(1);
+        r.task3A = take(2).toDouble();
+        r.task3B = take(3).toDouble();
     } else if (prefix.startsWith("task3_Info") ||
                prefix.startsWith("task4_Info")) {
         r.type = ResponseType::TaskInfo;

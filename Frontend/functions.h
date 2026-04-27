@@ -10,6 +10,7 @@ enum class ResponseType {
     RegError,
     Task1Ok,
     Task2Ok,
+    Task3Ok,
     TaskInfo,
     CheckOk,
     CheckFalse,
@@ -27,11 +28,16 @@ struct ParsedResponse
     // общие поля
     QString message;
 
-    // task1
+    // task1-2
     QString funcName;
     double a = 0.0;
     double b = 0.0;
     int n = 0;
+
+    // task3
+    QString task3Function;
+    double task3A = 0.0;
+    double task3B = 0.0;
 
     // check
     double userAnswer = 0.0;

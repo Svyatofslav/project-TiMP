@@ -181,7 +181,32 @@ void WindowManager::connectSignals()
                 m_taskWidget->activateWindow();
             });
 
-    // --- task3-4 в разработке ---
+    // --- task3 ---
+    connect(m_api, &ClientApi::task3Received,
+            [this](const QString &funcName, double a, double b) {
+                if (!m_taskWidget) {
+                    m_taskWidget = new TaskWidget;
+                    connect(m_taskWidget, &TaskWidget::checkRequested,
+                            m_api, &ClientApi::sendCheckTask);
+                    connect(m_taskWidget, &TaskWidget::backToMenuRequested,
+                            [this]() {
+                                if (m_taskWidget) m_taskWidget->hide();
+                                if (m_mainMenu) {
+                                    m_mainMenu->show();
+                                    m_mainMenu->raise();
+                                    m_mainMenu->activateWindow();
+                                }
+                            });
+                }
+                if (m_mainMenu) m_mainMenu->hide();
+                m_taskWidget->setTask(funcName, a, b, 0,
+                                      TaskWidget::Method::Task3TrapezoidCheck);
+                m_taskWidget->show();
+                m_taskWidget->raise();
+                m_taskWidget->activateWindow();
+            });
+
+    // --- task4 в разработке ---
     connect(m_api, &ClientApi::taskInfo,
             [this](const QString &message) {
                 QMessageBox::information(nullptr, "Задание", message);
