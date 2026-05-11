@@ -38,4 +38,9 @@ QString funcName_task2(int funcId);
 QString get_random_task3();
 QString solver_task3(const QString& params);
 
+// Вспомогательные для task4
+QString get_random_task4();
+double  solver_trapezoid(const QString& params);
+double  solver_simpson(const QString& params);
+
 #endif // FUNCTIONS_TO_SERVER_H
