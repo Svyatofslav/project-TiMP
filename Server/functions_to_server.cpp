@@ -104,6 +104,13 @@ static const Task3Variant task3_variants[] = {
 
 static const int TASK3_COUNT = sizeof(task3_variants) / sizeof(Task3Variant);
 
+static const char* task4_options[4] = {
+    "Метод Симпсона имеет более высокий порядок точности: погрешность O(h^4) против O(h^2) у метода трапеций",
+    "Метод Симпсона использует меньше вычислений подынтегральной функции, поэтому быстрее сходится",
+    "Метод трапеций применим только к монотонным функциям, а метод Симпсона - к любым",
+    "Метод Симпсона не имеет погрешности при чётном числе разбиений n"
+};
+
 // Параметры хранятся как целые сотые (избегаем проблем с локалью при сериализации)
 QString get_random_task1()
 {
@@ -127,6 +134,36 @@ QString get_random_task3()
         .arg(v.b, 0, 'f', 3)
         .arg(v.answer);
 }
+
+QString get_random_task4()
+{
+    int funcId  = QRandomGenerator::global()->bounded(0, 5);
+    int a_cents = QRandomGenerator::global()->bounded(-157, 158);
+    int step    = QRandomGenerator::global()->bounded(100, 401);
+    int b_cents = a_cents + step;
+
+    // n чётное для метода Симпсона
+    int n = QRandomGenerator::global()->bounded(2, 9) * 2;
+
+    // Перемешиваем варианты: генерируем перестановку индексов [0,1,2,3]
+    int order[4] = {0, 1, 2, 3};
+    for (int i = 3; i > 0; --i) {
+        int j = QRandomGenerator::global()->bounded(0, i + 1);
+        std::swap(order[i], order[j]);
+    }
+
+    // Ищем позицию правильного ответа (где order[pos] == 0)
+    int correctPos = 0;
+    for (int i = 0; i < 4; ++i)
+        if (order[i] == 0) { correctPos = i; break; }
+
+    // params: funcId||a_cents||b_cents||n||correctPos||order0||order1||order2||order3
+    return QString("%1||%2||%3||%4||%5||%6||%7||%8||%9")
+        .arg(funcId).arg(a_cents).arg(b_cents).arg(n)
+        .arg(correctPos)
+        .arg(order[0]).arg(order[1]).arg(order[2]).arg(order[3]);
+}
+
 // Метод средних прямоугольников
 double solver_task1(const QString& params)
 {
@@ -177,6 +214,51 @@ QString solver_task3(const QString& params)
     if (parts.size() < 4) return "нет";
     return parts[3];
 }
+
+double solver_trapezoid(const QString& params)
+{
+    QStringList p = params.split("||");
+    if (p.size() < 4) return 0.0;
+
+    int    funcId = p[0].toInt();
+    double a      = p[1].toDouble() / 100.0;
+    double b      = p[2].toDouble() / 100.0;
+    int    n      = p[3].toInt();
+
+    if (n <= 0) return 0.0;
+
+    double h      = (b - a) / n;
+    double result = evalFunc_task1(funcId, a) + evalFunc_task1(funcId, b);
+    for (int i = 1; i < n; ++i)
+        result += 2.0 * evalFunc_task1(funcId, a + i * h);
+
+    return result * h / 2.0;
+}
+
+double solver_simpson(const QString& params)
+{
+    QStringList p = params.split("||");
+    if (p.size() < 4) return 0.0;
+
+    int    funcId = p[0].toInt();
+    double a      = p[1].toDouble() / 100.0;
+    double b      = p[2].toDouble() / 100.0;
+    int    n      = p[3].toInt();
+
+    // n должно быть чётным для Симпсона
+    if (n <= 0) return 0.0;
+    if (n % 2 != 0) n += 1;
+
+    double h      = (b - a) / n;
+    double result = evalFunc_task1(funcId, a) + evalFunc_task1(funcId, b);
+    for (int i = 1; i < n; ++i) {
+        double coeff = (i % 2 == 0) ? 2.0 : 4.0;
+        result += coeff * evalFunc_task1(funcId, a + i * h);
+    }
+
+    return result * h / 3.0;
+}
+
 // ─── Обработчики команд ───────────────────────────────────────────────────────
 
 QString task1(QStringList params, int descriptor)
@@ -242,7 +324,36 @@ QString task4(QStringList params, int descriptor)
 {
     QString login = DataBase::getInstance()->getLoginBySocket(QString::number(descriptor));
     if (login.isEmpty()) return "task4_Error||не авторизован";
-    return "task4_Info||задание в разработке";
+
+    QString taskParams = get_random_task4();
+    QStringList p = taskParams.split("||");
+
+    // Считаем результаты обоих методов
+    // solver'ам передаём только первые 4 параметра: funcId||a||b||n
+    QString calcParams = QString("%1||%2||%3||%4").arg(p[0], p[1], p[2], p[3]);
+    double trapResult    = solver_trapezoid(calcParams);
+    double simpsonResult = solver_simpson(calcParams);
+
+    DataBase::getInstance()->updateCurrTask(login, 4);
+    DataBase::getInstance()->updateParams(login, taskParams);
+
+    qDebug() << "[Server] task4 для" << login << "| params:" << taskParams;
+
+    // Собираем текст вариантов в перемешанном порядке
+    int order[4] = { p[5].toInt(), p[6].toInt(), p[7].toInt(), p[8].toInt() };
+
+    // format: task4_OK||funcName||a||b||n||trap||simp||opt1||opt2||opt3||opt4
+    return QString("task4_OK||%1||%2||%3||%4||%5||%6||%7||%8||%9||%10")
+        .arg(funcName_task1(p[0].toInt()))
+        .arg(p[1].toDouble() / 100.0, 0, 'f', 2)
+        .arg(p[2].toDouble() / 100.0, 0, 'f', 2)
+        .arg(p[3])
+        .arg(trapResult,    0, 'f', 6)
+        .arg(simpsonResult, 0, 'f', 6)
+        .arg(task4_options[order[0]])
+        .arg(task4_options[order[1]])
+        .arg(task4_options[order[2]])
+        .arg(task4_options[order[3]]);
 }
 
 // format: check_task||ответ
@@ -283,6 +394,40 @@ QString check_task(QStringList params, int descriptor)
                 .arg(userAnswer)
                 .arg(correctAnswer);
     }
+
+    // ─── Task4: выбор варианта ответа (1–4) ──────────────────────────────────
+    if (currTask == 4) {
+        bool ok;
+        int userIndex = params[0].trimmed().toInt(&ok) - 1; // приводим к 0-индексации
+
+        if (!ok || userIndex < 0 || userIndex > 3)
+            return "check_Error||некорректный ответ, введите число от 1 до 4";
+
+        QStringList p = taskParams.split("||");
+        int correctPos = p[4].toInt(); // позиция правильного ответа среди перемешанных
+
+        bool isCorrect = (userIndex == correctPos);
+
+        qDebug() << "[Task] Пользователь:" << login
+                 << "| задание: 4"
+                 << "| ответ:" << userIndex + 1
+                 << "| верно:" << isCorrect;
+
+        DataBase::getInstance()->updateTaskScore(login, 4, isCorrect ? 1 : -1);
+        DataBase::getInstance()->clearTaskState(login);
+
+        // Получаем текст правильного ответа для отображения клиенту
+        int order[4] = { p[5].toInt(), p[6].toInt(), p[7].toInt(), p[8].toInt() };
+        QString correctText = QString::fromUtf8(task4_options[order[correctPos]]);
+
+        if (isCorrect)
+            return QString("check_OK||%1").arg(correctText);
+        else
+            return QString("check_False||%1||%2")
+                .arg(userIndex + 1)
+                .arg(correctText);
+    }
+
 
     // ─── Task1, Task2: числовой ответ ────────────────────────────────────────
     bool ok;
