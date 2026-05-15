@@ -101,10 +101,19 @@ ParsedResponse Functions::parseResponse(const QString &msg)
         r.task3Function = take(1);
         r.task3A = take(2).toDouble();
         r.task3B = take(3).toDouble();
-    } else if (prefix.startsWith("task3_Info") ||
-               prefix.startsWith("task4_Info")) {
-        r.type = ResponseType::TaskInfo;
-        r.message = take(1);
+    } else if (prefix == "task4_OK") {
+        // task4_OK||funcName||a||b||n||trap||simp||opt1||opt2||opt3||opt4
+        r.type = ResponseType::Task4Ok;
+        r.task4FuncName = take(1);
+        r.task4A = take(2).toDouble();
+        r.task4B = take(3).toDouble();
+        r.task4N = take(4).toInt();
+        r.trapResult = take(5).toDouble();
+        r.simpsonResult = take(6).toDouble();
+        r.option1 = take(7);
+        r.option2 = take(8);
+        r.option3 = take(9);
+        r.option4 = take(10);
     } else if (prefix == "check_OK") {
         // check_OK||correct
         r.type = ResponseType::CheckOk;

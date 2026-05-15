@@ -206,10 +206,49 @@ void WindowManager::connectSignals()
                 m_taskWidget->activateWindow();
             });
 
-    // --- task4 в разработке ---
-    connect(m_api, &ClientApi::taskInfo,
-            [this](const QString &message) {
-                QMessageBox::information(nullptr, "Задание", message);
+    // --- task4 ---
+    connect(m_api, &ClientApi::task4Received,
+            [this](const QString &funcName,
+                   double a,
+                   double b,
+                   int n,
+                   double trapResult,
+                   double simpsonResult,
+                   const QString &option1,
+                   const QString &option2,
+                   const QString &option3,
+                   const QString &option4) {
+                if (!m_taskWidget) {
+                    m_taskWidget = new TaskWidget;
+                    connect(m_taskWidget, &TaskWidget::checkRequested,
+                            m_api, &ClientApi::sendCheckTask);
+                    connect(m_taskWidget, &TaskWidget::backToMenuRequested,
+                            [this]() {
+                                if (m_taskWidget) m_taskWidget->hide();
+                                if (m_mainMenu) {
+                                    m_mainMenu->show();
+                                    m_mainMenu->raise();
+                                    m_mainMenu->activateWindow();
+                                }
+                            });
+                }
+
+                if (m_mainMenu) m_mainMenu->hide();
+
+                m_taskWidget->setTask4(funcName,
+                                       a,
+                                       b,
+                                       n,
+                                       trapResult,
+                                       simpsonResult,
+                                       option1,
+                                       option2,
+                                       option3,
+                                       option4);
+
+                m_taskWidget->show();
+                m_taskWidget->raise();
+                m_taskWidget->activateWindow();
             });
 
     // --- результат проверки ---
