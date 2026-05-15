@@ -11,6 +11,7 @@ enum class ResponseType {
     Task1Ok,
     Task2Ok,
     Task3Ok,
+    Task4Ok,
     TaskInfo,
     CheckOk,
     CheckFalse,
@@ -38,6 +39,18 @@ struct ParsedResponse
     QString task3Function;
     double task3A = 0.0;
     double task3B = 0.0;
+
+    // task4
+    QString task4FuncName;
+    double task4A = 0.0;
+    double task4B = 0.0;
+    int task4N = 0;
+    double trapResult = 0.0;
+    double simpsonResult = 0.0;
+    QString option1;
+    QString option2;
+    QString option3;
+    QString option4;
 
     // check
     double userAnswer = 0.0;

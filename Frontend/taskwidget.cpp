@@ -56,6 +56,47 @@ void TaskWidget::setTask(const QString &funcName, double a, double b, int n, Met
     ui->lineAnswer->clear();
 }
 
+void TaskWidget::setTask4(const QString &funcName,
+                          double a,
+                          double b,
+                          int n,
+                          double trapResult,
+                          double simpsonResult,
+                          const QString &option1,
+                          const QString &option2,
+                          const QString &option3,
+                          const QString &option4)
+{
+    m_currentMethod = Method::Task4SimpsonChoice;
+
+    QString text = QString(
+                       "Дано: функция и высокая точность вычисления.\n"
+                       "Функция: %1\n"
+                       "Отрезок: [%2, %3]\n"
+                       "Число разбиений: n = %4\n"
+                       "Метод трапеций дал результат: %5\n"
+                       "Метод Симпсона дал результат: %6\n\n"
+                       "Найти: почему метод Симпсона предпочтительнее метода трапеций?\n\n"
+                       "1) %7\n"
+                       "2) %8\n"
+                       "3) %9\n"
+                       "4) %10\n\n"
+                       "Введите номер правильного ответа: 1, 2, 3 или 4.")
+                       .arg(funcName)
+                       .arg(a, 0, 'f', 2)
+                       .arg(b, 0, 'f', 2)
+                       .arg(n)
+                       .arg(trapResult, 0, 'f', 6)
+                       .arg(simpsonResult, 0, 'f', 6)
+                       .arg(option1)
+                       .arg(option2)
+                       .arg(option3)
+                       .arg(option4);
+
+    ui->labelTaskText->setText(text);
+    ui->lineAnswer->clear();
+}
+
 void TaskWidget::on_btnSend_clicked()
 {
     QString answer = ui->lineAnswer->text().trimmed().toLower();
@@ -64,6 +105,14 @@ void TaskWidget::on_btnSend_clicked()
         if (answer != "да" && answer != "нет") {
             QMessageBox::warning(this, "Неверный ввод",
                                  "Для задания 3 разрешены только ответы: да или нет.");
+            return;
+        }
+    }
+
+    if (m_currentMethod == Method::Task4SimpsonChoice) {
+        if (answer != "1" && answer != "2" && answer != "3" && answer != "4") {
+            QMessageBox::warning(this, "Неверный ввод",
+                                 "Для задания 4 нужно ввести номер ответа: 1, 2, 3 или 4.");
             return;
         }
     }

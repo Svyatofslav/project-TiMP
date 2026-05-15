@@ -25,57 +25,6 @@
 background-color: rgb(51, 51, 51);
 color: rgb(222, 238, 238)</string>
   </property>
-  <widget class="QLabel" name="labelTaskText">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>60</y>
-     <width>450</width>
-     <height>240</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>System</family>
-     <pointsize>12</pointsize>
-     <italic>false</italic>
-     <underline>false</underline>
-     <kerning>true</kerning>
-     <hintingpreference>PreferNoHinting</hintingpreference>
-     <fontweight>Medium</fontweight>
-    </font>
-   </property>
-   <property name="focusPolicy">
-    <enum>Qt::FocusPolicy::NoFocus</enum>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LayoutDirection::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border: 1px solid rgb(110, 238, 238);
-border-radius: 15px;
-padding: 25px;
-overflow: auto;</string>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Shadow::Plain</enum>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="textFormat">
-    <enum>Qt::TextFormat::AutoText</enum>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignJustify|Qt::AlignmentFlag::AlignVCenter</set>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-   <property name="indent">
-    <number>-1</number>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="lineAnswer">
    <property name="geometry">
     <rect>
@@ -89,6 +38,7 @@ overflow: auto;</string>
     <font>
      <family>Sitka</family>
      <pointsize>12</pointsize>
+     <italic>false</italic>
     </font>
    </property>
    <property name="tabletTracking">
@@ -109,7 +59,7 @@ border-radius: 8px;
     <rect>
      <x>90</x>
      <y>390</y>
-     <width>450</width>
+     <width>461</width>
      <height>45</height>
     </rect>
    </property>
@@ -117,6 +67,7 @@ border-radius: 8px;
     <font>
      <family>Sitka</family>
      <pointsize>12</pointsize>
+     <italic>false</italic>
      <bold>true</bold>
     </font>
    </property>
@@ -145,6 +96,7 @@ background-color: rgb(30, 30, 30);</string>
     <font>
      <family>Sitka</family>
      <pointsize>12</pointsize>
+     <italic>false</italic>
     </font>
    </property>
    <property name="styleSheet">
@@ -175,12 +127,115 @@ border-radius: 8px;</string>
     <font>
      <family>Sitka</family>
      <pointsize>12</pointsize>
+     <italic>false</italic>
     </font>
    </property>
    <property name="text">
     <string>Ответ:</string>
    </property>
   </widget>
+  <widget class="QScrollArea" name="scrollArea">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>30</y>
+     <width>481</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius: 15px;</string>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>481</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>471</width>
+      <height>241</height>
+     </size>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="labelTaskText">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Courier New</family>
+         <pointsize>12</pointsize>
+         <italic>false</italic>
+         <underline>false</underline>
+         <kerning>true</kerning>
+         <hintingpreference>PreferNoHinting</hintingpreference>
+         <fontweight>Medium</fontweight>
+        </font>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::FocusPolicy::NoFocus</enum>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LayoutDirection::LeftToRight</enum>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid rgb(110, 238, 238);
+border-radius: 15px;
+padding: 25px;
+</string>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Plain</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::TextFormat::AutoText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+       <property name="indent">
+        <number>-1</number>
+       </property>
+       <property name="openExternalLinks">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <zorder>scrollArea</zorder>
+  <zorder>lineAnswer</zorder>
+  <zorder>btnBack</zorder>
+  <zorder>btnSend</zorder>
+  <zorder>label_2</zorder>
  </widget>
  <resources/>
  <connections/>

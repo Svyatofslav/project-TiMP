@@ -18,10 +18,21 @@ public:
     enum class Method {
         MiddleRectangles,
         LeftRectangles,
-        Task3TrapezoidCheck
+        Task3TrapezoidCheck,
+        Task4SimpsonChoice
     };
 
     void setTask(const QString &funcName, double a, double b, int n, Method method);
+    void setTask4(const QString &funcName,
+                  double a,
+                  double b,
+                  int n,
+                  double trapResult,
+                  double simpsonResult,
+                  const QString &option1,
+                  const QString &option2,
+                  const QString &option3,
+                  const QString &option4);
 
 signals:
     void checkRequested(const QString &answer);

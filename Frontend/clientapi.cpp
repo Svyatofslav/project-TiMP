@@ -190,6 +190,17 @@ void ClientApi::processResponse(const QString &msg)
         emit task2Received(r.funcName, r.a, r.b, r.n);
     } else if (r.type == ResponseType::Task3Ok) {
         emit task3Received(r.task3Function, r.task3A, r.task3B);
+    } else if (r.type == ResponseType::Task4Ok) {
+        emit task4Received(r.task4FuncName,
+                           r.task4A,
+                           r.task4B,
+                           r.task4N,
+                           r.trapResult,
+                           r.simpsonResult,
+                           r.option1,
+                           r.option2,
+                           r.option3,
+                           r.option4);
     } else if (r.type == ResponseType::TaskInfo) {
         emit taskInfo(r.message);
     } else if (r.type == ResponseType::CheckOk) {
