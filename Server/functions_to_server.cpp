@@ -3,6 +3,7 @@
 #include <QCryptographicHash>
 #include <QRandomGenerator>
 #include <cmath>
+#include <QRegularExpression>
 
 QString handleSHA512(const QString& payload)
 {
@@ -515,6 +516,15 @@ QString reg(QStringList params, int descriptor)
 
     if (password1 != password2)
         return "reg_Error||пароли не совпадают";
+
+    QRegularExpression hasLetter("[A-Za-zА-Яа-яЁё]");
+    QRegularExpression hasDigit("\\d");
+
+    if (!hasLetter.match(password1).hasMatch() ||
+        !hasDigit.match(password1).hasMatch())
+    {
+        return "reg_Error||Пароль должен содержать буквы и цифры";
+    }
 
     // Проверка до INSERT — точное сообщение об ошибке
     QString existing = DataBase::getInstance()->checkLoginOrEmail(login, email);

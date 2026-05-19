@@ -1,5 +1,6 @@
 #include "authwidget.h"
 #include "ui_authwidget.h"
+#include <QMessageBox>
 
 AuthWidget::AuthWidget(QWidget *parent) :
     QWidget(parent),
@@ -25,8 +26,15 @@ AuthWidget::~AuthWidget()
 
 void AuthWidget::on_btnLogin_clicked()
 {
-    emit loginRequested(ui->lineLogin->text(),
-                        ui->linePassword->text());
+    QString login = ui->lineLogin->text().trimmed();
+    QString password = ui->linePassword->text();
+
+    if (login.isEmpty() || password.isEmpty()) {
+        QMessageBox::warning(this, "Авторизация", "Заполните все поля");
+        return;
+    }
+
+    emit loginRequested(login, password);
 }
 
 void AuthWidget::on_btnToRegister_clicked()
