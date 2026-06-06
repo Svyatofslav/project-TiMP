@@ -517,6 +517,9 @@ QString reg(QStringList params, int descriptor)
     if (password1 != password2)
         return "reg_Error||пароли не совпадают";
 
+    if (password1.length() < 5)
+        return "reg_Error||пароль слишком короткий";
+
     QRegularExpression hasLetter("[A-Za-zА-Яа-яЁё]");
     QRegularExpression hasDigit("\\d");
 
